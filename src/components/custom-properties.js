@@ -8,16 +8,23 @@ class CustomProperties extends Component {
 
     this.container = null;
     this.containerRef = this.containerRef.bind(this);
-    this.applyProperties = this.applyProperties.bind(this);
+    this.handleNewProperties = this.handleNewProperties.bind(this);
   }
 
   componentDidMount() {
-    this.applyProperties(this.props.properties);
+    const { properties } = this.props;
+    const keys = Object.keys(properties);
+
+    keys.forEach(key => {
+      setStyleProperty(this.container, key, properties[key]);
+    });
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.properties !== this.props.properties) {
-      this.applyProperties(nextProps.properties, this.props.properties);
+    const { properties } = this.props;
+
+    if (nextProps.properties !== properties) {
+      this.handleNewProperties(nextProps.properties, properties);
     }
   }
 
@@ -25,27 +32,18 @@ class CustomProperties extends Component {
     this.container = element;
   }
 
-  applyProperties(properties, previousProperties) {
-    const keys = Object.keys(properties);
+  handleNewProperties(next, previous) {
+    const nextKeys = Object.keys(next);
+    const previousKeys = Object.keys(previous);
+    const removedKeys = pullAll(previousKeys, nextKeys);
 
-    if (!previousProperties) {
-      keys.forEach((key) => {
-        setStyleProperty(this.container, key, properties[key]);
+    nextKeys
+      .filter(key => next[key] !== previous[key])
+      .forEach(key => {
+        setStyleProperty(this.container, key, next[key]);
       });
 
-      return;
-    }
-
-    const previousKeys = Object.keys(previousProperties);
-    const removedKeys = pullAll(previousKeys, keys);
-
-    keys.forEach((key) => {
-      if (properties[key] !== previousProperties[key]) {
-        setStyleProperty(this.container, key, properties[key]);
-      }
-    });
-
-    removedKeys.forEach((key) => {
+    removedKeys.forEach(key => {
       removeStyleProperty(this.container, key);
     });
   }
