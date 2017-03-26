@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import setStyleProperty from '../utilities/set-style-property';
+import setStyleProperty from '../../utilities/set-style-property';
 
 const PROPERTY = '--some-property';
 const VALUE = '#FF00FF';
