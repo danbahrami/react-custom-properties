@@ -1,17 +1,3 @@
-import React from 'react';
+import CustomProperties from './components/custom-properties';
 
-class MyComponent extends React.Component {
-  componentDidMount() {
-
-  }
-
-  render() {
-    return (
-      <div className="react-custom-properties">
-        Hello World!
-      </div>
-    );
-  }
-}
-
-export default MyComponent;
+export default CustomProperties;
