@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import { setStyleProperty } from '../utilities';
+import { pullAll } from 'lodash';
+import { setStyleProperty, removeStyleProperty } from '../utilities';
 
 class CustomProperties extends Component {
   constructor(props) {
@@ -27,10 +28,25 @@ class CustomProperties extends Component {
   applyProperties(properties, previousProperties) {
     const keys = Object.keys(properties);
 
+    if (!previousProperties) {
+      keys.forEach((key) => {
+        setStyleProperty(this.container, key, properties[key]);
+      });
+
+      return;
+    }
+
+    const previousKeys = Object.keys(previousProperties);
+    const removedKeys = pullAll(previousKeys, keys);
+
     keys.forEach((key) => {
-      if (!(previousProperties && properties[key] === previousProperties[key])) {
+      if (properties[key] !== previousProperties[key]) {
         setStyleProperty(this.container, key, properties[key]);
       }
+    });
+
+    removedKeys.forEach((key) => {
+      removeStyleProperty(this.container, key);
     });
   }
 

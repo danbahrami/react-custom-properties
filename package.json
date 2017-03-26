@@ -45,10 +45,11 @@
     "eslint-plugin-babel": "^3.1.0",
     "eslint-plugin-react": "^4.2.3",
     "jsdom": "^8.1.0",
+    "lodash": "^4.17.4",
     "mocha": "^2.4.5",
     "nodemon": "^1.9.1",
-    "react-addons-test-utils": "^15.0.0",
     "react": "^15.0.0",
+    "react-addons-test-utils": "^15.0.0",
     "react-dom": "^15.0.0",
     "sinon": "^1.17.3"
   },

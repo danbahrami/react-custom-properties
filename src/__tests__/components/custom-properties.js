@@ -9,10 +9,12 @@ import * as utilities from '../../utilities';
 describe('<CustomProperties />', () => {
   before(() => {
     sinon.spy(utilities, 'setStyleProperty');
+    sinon.spy(utilities, 'removeStyleProperty');
   });
 
   beforeEach(() => {
     utilities.setStyleProperty.reset();
+    utilities.removeStyleProperty.reset();
   });
 
   it('renders it`s children', () => {
@@ -67,7 +69,23 @@ describe('<CustomProperties />', () => {
     });
 
     it('removes any custom properties that are no longer present', () => {
+      const wrapper = mount(
+        <CustomProperties properties={{
+          '--foo': 'bar',
+          '--baz': 'bat',
+        }} />
+      );
 
+      const container = wrapper.instance().container;
+
+      wrapper.setProps({
+        properties: {
+          '--foo': 'bar',
+        }
+      });
+
+      expect(utilities.removeStyleProperty.callCount).to.equal(1);
+      expect(utilities.removeStyleProperty.calledWith(container, '--baz')).to.equal(true);
     });
   });
 });
