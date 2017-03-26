@@ -1,3 +1,5 @@
+import { isValidProperty, warning } from './';
+
 /**
  * A helper utility to abstract directly setting style properties
  * on DOM elements. This is mainly to help with testing.
@@ -9,7 +11,11 @@
  * @return {void}
  */
 const setStyleProperty = (element, property, value) => {
-  element.style.setProperty(property, value);
+  if (!isValidProperty(property)) {
+    warning(`Tried to apply an invalid Custom Property: ${property}`);
+  } else {
+    element.style.setProperty(property, value);
+  }
 };
 
 export default setStyleProperty;
