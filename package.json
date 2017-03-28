@@ -1,6 +1,6 @@
 {
   "name": "react-custom-properties",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "description": "A React component for applying CSS Variables (Custom Properties)",
   "repository": {
     "type": "git",
