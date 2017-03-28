@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { pullAll } from 'lodash';
-import { setStyleProperty, removeStyleProperty } from '../utilities';
+import { setStyleProperty, removeStyleProperty, getRoot } from '../utilities';
 
 class CustomProperties extends Component {
   constructor(props) {
@@ -8,6 +8,7 @@ class CustomProperties extends Component {
 
     this.container = null;
     this.containerRef = this.containerRef.bind(this);
+    this.getContainer = this.getContainer.bind(this);
     this.handleNewProperties = this.handleNewProperties.bind(this);
   }
 
@@ -16,7 +17,7 @@ class CustomProperties extends Component {
     const keys = Object.keys(properties);
 
     keys.forEach(key => {
-      setStyleProperty(this.container, key, properties[key]);
+      setStyleProperty(this.getContainer(), key, properties[key]);
     });
   }
 
@@ -28,8 +29,28 @@ class CustomProperties extends Component {
     }
   }
 
+  componentWillUnmount() {
+    const { global, properties } = this.props;
+
+    if (!global) {
+      return;
+    }
+
+    const keys = Object.keys(properties);
+
+    keys.forEach(key => {
+      removeStyleProperty(this.getContainer(), key);
+    });
+  }
+
   containerRef(element) {
     this.container = element;
+  }
+
+  getContainer() {
+    const { global } = this.props;
+
+    return global ? getRoot() : this.container;
   }
 
   handleNewProperties(next, previous) {
@@ -40,11 +61,11 @@ class CustomProperties extends Component {
     nextKeys
       .filter(key => next[key] !== previous[key])
       .forEach(key => {
-        setStyleProperty(this.container, key, next[key]);
+        setStyleProperty(this.getContainer(), key, next[key]);
       });
 
     removedKeys.forEach(key => {
-      removeStyleProperty(this.container, key);
+      removeStyleProperty(this.getContainer(), key);
     });
   }
 
@@ -58,10 +79,12 @@ class CustomProperties extends Component {
 }
 
 CustomProperties.propTypes = {
+  global: PropTypes.bool,
   properties: PropTypes.object,
 };
 
 CustomProperties.defaultProps = {
+  global: false,
   properties: {},
 };
 
