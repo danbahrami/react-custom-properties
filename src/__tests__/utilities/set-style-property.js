@@ -1,6 +1,5 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import * as warning from 'warning';
 import setStyleProperty from '../../utilities/set-style-property';
 import * as utilities from '../../utilities';
 
@@ -8,40 +7,33 @@ const PROPERTY = '--some-property';
 const VALUE = '#FF00FF';
 
 const setProperty = sinon.spy();
-
 const element = { style: { setProperty } };
 
 describe('setStyleProperty', () => {
   before(() => {
-    sinon.spy(utilities, 'warning');
+    sinon.stub(utilities, 'isValidProperty');
   });
 
   beforeEach(() => {
     setProperty.reset();
   });
 
-  it('it sets the correct property on the given element', () => {
-    setStyleProperty(element, PROPERTY, VALUE);
+  describe('when a valid property name is given', () => {
+    it('it sets the correct property on the given element', () => {
+      utilities.isValidProperty.returns(true);
 
-    expect(setProperty.calledWith(PROPERTY, VALUE)).to.equal(true);
-  });
+      setStyleProperty(element, PROPERTY, VALUE);
 
-  it('does not display any console warnings', () => {
-    expect(utilities.warning.called).to.equal(false);
+      expect(setProperty.calledWith(PROPERTY, VALUE)).to.equal(true);
+    });
   });
 
   describe('when an invalid property name is given', () => {
-    before(() => {
-      sinon.stub(utilities, 'isValidProperty').returns(false);
-    });
+    it('does not set the property', () => {
+      utilities.isValidProperty.returns(false);
 
-    it('displays a console warning', () => {
       setStyleProperty(element, PROPERTY, VALUE);
 
-      expect(utilities.warning.calledOnce).to.equal(true);
-    });
-
-    it('does not set the property', () => {
       expect(setProperty.called).to.equal(false);
     });
   });

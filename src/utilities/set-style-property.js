@@ -1,4 +1,4 @@
-import { isValidProperty, warning } from './';
+import { isValidProperty } from './';
 
 /**
  * A helper utility to abstract directly setting style properties
@@ -11,9 +11,7 @@ import { isValidProperty, warning } from './';
  * @return {void}
  */
 const setStyleProperty = (element, property, value) => {
-  if (!isValidProperty(property)) {
-    warning(`Tried to apply an invalid Custom Property: ${property}`);
-  } else {
+  if (isValidProperty(property)) {
     element.style.setProperty(property, value);
   }
 };
