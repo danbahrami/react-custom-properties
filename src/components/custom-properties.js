@@ -1,6 +1,12 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import propTypes from 'prop-types';
 import { pullAll } from 'lodash';
-import { setStyleProperty, removeStyleProperty, getRoot } from '../utilities';
+import {
+  setStyleProperty,
+  removeStyleProperty,
+  getRoot,
+  isValidProperty,
+} from '../utilities';
 
 class CustomProperties extends Component {
   constructor(props) {
@@ -79,8 +85,15 @@ class CustomProperties extends Component {
 }
 
 CustomProperties.propTypes = {
-  global: PropTypes.bool,
-  properties: PropTypes.object,
+  global: propTypes.bool,
+  properties: propTypes.objectOf((value, key, componentName) => {
+    if (!isValidProperty(key)) {
+      return new Error(`
+<${componentName} /> could not set the property "${key}: ${value[key]};".
+Custom Property names must be a string starting with two dashes, for example "--theme-background".
+      `.trim());
+    }
+  }),
 };
 
 CustomProperties.defaultProps = {
