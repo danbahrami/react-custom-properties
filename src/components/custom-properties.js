@@ -62,7 +62,7 @@ class CustomProperties extends Component {
     const nextKeys = Object.keys(next);
     const previousKeys = Object.keys(previous);
     const removedKeys = previousKeys
-      .filter(key => nextKeys.indexOf(key) === -1);
+      .filter(key => typeof next[key] === 'undefined');
 
     nextKeys
       .filter(key => next[key] !== previous[key])
