@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
-import { pullAll } from 'lodash';
 import {
   setStyleProperty,
   removeStyleProperty,
@@ -62,7 +61,8 @@ class CustomProperties extends Component {
   handleNewProperties(next, previous) {
     const nextKeys = Object.keys(next);
     const previousKeys = Object.keys(previous);
-    const removedKeys = pullAll(previousKeys, nextKeys);
+    const removedKeys = previousKeys
+      .filter(key => nextKeys.indexOf(key) === -1);
 
     nextKeys
       .filter(key => next[key] !== previous[key])
