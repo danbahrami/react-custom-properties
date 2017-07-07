@@ -111,6 +111,32 @@ describe('<CustomProperties />', () => {
         expect(utilities.setStyleProperty.calledWith(FAKE_ROOT_NODE, '--foo', 'bar')).to.equal(true);
         expect(utilities.setStyleProperty.calledWith(FAKE_ROOT_NODE, '--baz', 'bat')).to.equal(true);
       });
+
+      it('directly returns children', () => {
+        const children = (
+          <div>Children</div>
+        );
+        const wrapper = shallow(
+          <CustomProperties
+            properties={{ '--foo': 'bar', '--baz': 'bat' }}
+            global
+          >
+            {children}
+          </CustomProperties>
+        );
+        expect(wrapper.equals(children)).to.equal(true);
+      })
+
+      it('doesn\'t render any extra elements', () => {
+        const wrapper = shallow(
+          <CustomProperties
+            properties={{ '--foo': 'bar', '--baz': 'bat' }}
+            global
+          />
+        );
+
+        expect(wrapper.isEmptyRender()).to.equal(true);
+      })
     });
 
     describe('on unmount', () => {
