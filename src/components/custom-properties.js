@@ -76,11 +76,11 @@ class CustomProperties extends Component {
   }
 
   render() {
-    return (
+    return !this.props.global ? (
       <div ref={this.containerRef}>
         {this.props.children}
       </div>
-    );
+    ) : (this.props.children || null);
   }
 }
 
