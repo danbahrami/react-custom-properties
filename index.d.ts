@@ -5,7 +5,7 @@ export interface ThemeProperties {
 }
 
 export interface CustomPropertiesProps {
-	global: boolean;
+	global?: boolean;
 	properties: ThemeProperties;
 }
 
