@@ -1,7 +1,7 @@
 import React from "react";
 
 export interface ThemeProperties {
-	[key: string]: string;
+	[key: string]?: string;
 }
 
 export interface CustomPropertiesProps {
